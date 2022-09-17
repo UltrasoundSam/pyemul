@@ -304,9 +304,18 @@ class Processor:
                      # RTS - Return from subroutine
                      0x60: ('RTS', self.RTS, self._implied, 6),
                      # SEx - Set Flag
-                     0x38: ('CLC', self.SET, 'C', 2),
-                     0xf8: ('CLD', self.SET, 'D', 2),
-                     0x78: ('CLI', self.SET, 'I', 2),
+                     0x38: ('SEC', self.SET, 'C', 2),
+                     0xf8: ('SED', self.SET, 'D', 2),
+                     0x78: ('SEI', self.SET, 'I', 2),
+                     # SBC - Subtract with carry
+                     0xe9: ('SBC Im', self.SBC, self._load_im, 2),
+                     0xe5: ('SBC Z', self.SBC, self._zero_page_value, 3),
+                     0xf5: ('SBC Z,x', self.SBC, self._zero_page_x_value, 4),
+                     0xed: ('SBC A', self.SBC, self._load_addr_value, 4),
+                     0xfd: ('SBC A,x', self.SBC, self._load_addr_x_value, 4),
+                     0xf9: ('SBC A,y', self.SBC, self._load_addr_y_value, 4),
+                     0xe1: ('SBC I,x', self.SBC, self._load_ix_value, 6),
+                     0xf1: ('SBC I,y', self.SBC, self._load_iy_value, 5),
                      # STA - Store accumulator
                      0x85: ('STA Z', self.STA, self._zero_page, 3),
                      0x95: ('STA Z,x', self.STA, self._zero_page_x, 4),
@@ -368,6 +377,9 @@ class Processor:
         except TypeError:
             # The argument is a fixed value rather than function
             additional_value = argument
+
+        # Print commands
+        print(f'{name}\t{additional_value}')
 
         # Execute
         instruction(additional_value)

@@ -6,6 +6,7 @@ Created on Mon Sep  5 18:09:53 2022
 """
 import math
 
+
 class Registers:
     '''
     An object for holding all the information about the 6502 CPU registers
@@ -151,7 +152,8 @@ class Processor:
 
         # Now define dictionary to hold each op-code. Value for each key is a
         # 4-tuple of (name string, function to call, addressing mode, #cycles)
-        self._ops = {# ADC - Add with carry
+        self._ops = {
+                     # ADC - Add with carry
                      0x69: ('ADC Im', self.ADC, self._load_im, 2),
                      0x65: ('ADC Z', self.ADC, self._zero_page_value, 3),
                      0x75: ('ADC Z,x', self.ADC, self._zero_page_x_value, 4),
@@ -456,7 +458,7 @@ class Processor:
         '''
         return (value & 0x7f) - (value & 0x80)
 
-    ######## Addressing Modes ########
+    # ------ Addressing Modes ------ #
     def _load_im(self):
         '''
         Load immediate: Next value in the program is the value to pass to the
@@ -848,7 +850,7 @@ class Processor:
         '''
         Decrement contents of y register by 1
         '''
-        self.r.y = (self.r.y - 1 ) & 0xff
+        self.r.y = (self.r.y - 1) & 0xff
         self.r.ZN(self.r.y)
 
     def EOR(self, value2):
@@ -1024,7 +1026,7 @@ class Processor:
         '''
         Return from subroutine
         '''
-        self.r.pc = (self.stack_pull_word() + 1 ) & 0xffff
+        self.r.pc = (self.stack_pull_word() + 1) & 0xffff
 
     def SBC(self, value2):
         '''

@@ -12,6 +12,7 @@ import pytest
 
 from pyemul.mmu import MMU, MemoryRangeError, ReadOnlyError
 
+
 @pytest.fixture
 def example_memory():
     '''
@@ -28,6 +29,7 @@ def test_address_length(example_memory):
     mems = example_memory
     assert len(mems.memory) == 0xffff
 
+
 def test_addblock(example_memory):
     '''
     Tests that valid new block can be added
@@ -36,14 +38,16 @@ def test_addblock(example_memory):
     example_memory.add_block(*new_block)
     assert example_memory.blocks[-1]['name'] == 'WriteOnly'
 
+
 def test_addblock_data(example_memory):
     '''
     Tests that a valid new block can be added, along with its data
     '''
     new_block = (0x5000, 0x5, 'WriteWithData', True,
-                [0x42, 0x55, 0x11, 0xb5, 0xea])
+                 [0x42, 0x55, 0x11, 0xb5, 0xea])
     example_memory.add_block(*new_block)
     assert example_memory.memory[0x5000] == 0x42
+
 
 def test_add_invalidblock(example_memory):
     '''
@@ -54,6 +58,7 @@ def test_add_invalidblock(example_memory):
     with pytest.raises(MemoryRangeError):
         example_memory.add_block(*new_block)
 
+
 def test_write_valid(example_memory):
     '''
     Checks that data can be written to memory
@@ -63,6 +68,7 @@ def test_write_valid(example_memory):
     example_memory.write(addr, newvalue)
     assert example_memory.read(addr) == newvalue
 
+
 def test_write_invalid(example_memory):
     '''
     Checks that data can be written to memory
@@ -70,10 +76,10 @@ def test_write_invalid(example_memory):
     # Add new read only block
     new_block = (0x5000, 0x1000, 'WriteOnly', True)
     example_memory.add_block(*new_block)
-    
+
     # Values to write
     newvalue = 0xea
     addr = 0x5001
-    
+
     with pytest.raises(ReadOnlyError):
         example_memory.write(addr, newvalue)

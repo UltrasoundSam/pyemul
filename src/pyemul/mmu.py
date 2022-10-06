@@ -6,6 +6,7 @@ Created on Tue Sep  6 16:56:29 2022
 """
 import array
 
+
 class MMU:
     '''
     Memory management unit that defines all the addresses that the 6502 can
@@ -74,20 +75,21 @@ class MMU:
         Reads byte of data from address addr
         '''
         return self.memory[addr]
-    
+
     def write(self, addr, value):
         '''
-        Writes value of data to address. 
+        Writes value of data to address.
         '''
         # Check to see whether we are allowed to write to memory location
         if self._read_only[addr]:
             raise ReadOnlyError()
-        
-        self.memory[addr] = value            
+
+        self.memory[addr] = value
 
 
 class MemoryRangeError(ValueError):
     pass
+
 
 class ReadOnlyError(TypeError):
     pass

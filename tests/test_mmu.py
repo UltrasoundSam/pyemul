@@ -36,11 +36,14 @@ def test_addblock(example_memory):
     example_memory.add_block(*new_block)
     assert example_memory.blocks[-1]['name'] == 'WriteOnly'
 
-def test_addblock(example_memory):
+def test_addblock_data(example_memory):
     '''
     Tests that a valid new block can be added, along with its data
     '''
-    pass
+    new_block = (0x5000, 0x5, 'WriteWithData', True,
+                [0x42, 0x55, 0x11, 0xb5, 0xea])
+    example_memory.add_block(*new_block)
+    assert example_memory.memory[0x5000] == 0x42
 
 def test_add_invalidblock(example_memory):
     '''

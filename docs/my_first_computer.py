@@ -19,11 +19,10 @@ filename = os.path.join(cwd, 'files', 'dividenumber.out')
 with open(filename, 'rb') as fi:
     instructions = fi.read()
 
-mems = MMU(((0, 0x3fff, 'RAM', False), 
+mems = MMU(((0, 0x3fff, 'RAM', False),
             (0x8000, len(instructions)-1, 'ROM', True, instructions)))
 
 divide = Processor(mems)
 
 for _ in range(230):
     divide.step()
-    

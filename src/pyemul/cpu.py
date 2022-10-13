@@ -372,7 +372,12 @@ class Processor:
         opcode = self.read_byte()
 
         # Decode instruction
-        name, instruction, argument, cycles = self._ops[opcode]
+        try:
+            name, instruction, argument, cycles = self._ops[opcode]
+        except KeyError:
+            raise InvalidInstructionError(f'{opcode} is not a valid instruction')
+
+        # Check to see whether argument in function or fixed value
         try:
             # Call function to load argument to operation
             additional_value = argument()
@@ -1088,3 +1093,7 @@ class Processor:
         # Need to update Z and N flags (if destination is not stack)
         if dest != 's':
             self.r.ZN(source_value)
+
+
+class InvalidInstructionError(ValueError):
+    pass

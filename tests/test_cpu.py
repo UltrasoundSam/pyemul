@@ -27,7 +27,7 @@ Tests various aspects of the CPU class
 import os
 import pytest
 
-from pyemul.cpu import Processor
+from pyemul.cpu import Processor, InvalidInstructionError
 from pyemul.mmu import MMU
 
 
@@ -67,3 +67,15 @@ def test_setup_cpu_programme_counter(divide_mmu):
     # Number of cycles should only be 7 now
     assert divide.cycles == 7
     assert divide.r.pc == 0x1000
+
+
+def test_invalid_instruction():
+    '''
+    Sets up 6502 and passes invalid instruction
+    '''
+    # Set up blank memory (set to 0xff)
+    mems = MMU(((0, 0x3fff, 'RAM', False),
+               (0x8000, 0x7fff, 'ROM', True, 0x7fff*[0xff])))
+    cpu = Processor(mems, program_counter=0x8000)
+    with pytest.raises(InvalidInstructionError):
+        cpu.step()

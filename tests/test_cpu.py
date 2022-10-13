@@ -79,3 +79,49 @@ def test_invalid_instruction():
     cpu = Processor(mems, program_counter=0x8000)
     with pytest.raises(InvalidInstructionError):
         cpu.step()
+
+
+def test_clearflags(divide_mmu):
+    '''
+    Tests that all flags are clear by clear flag instruction
+    '''
+    # Create basic setup
+    cpu = Processor(divide_mmu)
+
+    # Clear flag
+    cpu.r.clear_flags()
+
+    # Check that everything is clear
+    assert ((cpu.r.p >> 0) & 1) == 0
+    assert ((cpu.r.p >> 1) & 1) == 0
+    assert ((cpu.r.p >> 2) & 1) == 0
+    assert ((cpu.r.p >> 3) & 1) == 0
+    assert ((cpu.r.p >> 4) & 1) == 0
+    assert ((cpu.r.p >> 5) & 1) == 1
+    assert ((cpu.r.p >> 6) & 1) == 0
+    assert ((cpu.r.p >> 7) & 1) == 0
+
+
+def test_reset(divide_mmu):
+    '''
+    Tests that reset sequence is functioning correctly
+    '''
+    # Setup computer
+    cpu = Processor(divide_mmu)
+
+    # Run a few instructions
+    for _ in range(10):
+        cpu.step()
+
+    # Reset the registers
+    cpu.r.reset(program_counter=0x8000)
+
+    # Check registers are correct value
+    assert cpu.r.a == 0
+    assert cpu.r.x == 0
+    assert cpu.r.y == 0
+
+    assert cpu.r.p == cpu.r.flagbyte['?'] | cpu.r.flagbyte['I']
+    assert cpu.r.sp == 0xff
+
+    assert cpu.r.pc == 0x8000

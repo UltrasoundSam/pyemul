@@ -125,3 +125,19 @@ def test_reset(divide_mmu):
     assert cpu.r.sp == 0xff
 
     assert cpu.r.pc == 0x8000
+
+
+@pytest.mark.parametrize("value, expected", [(0, (True, False)), (-10, (False, True)), (24, (False, False))])
+def test_ZN(divide_mmu, value, expected):
+    '''
+    Tests that the zero and negative flag test works as it should
+    '''
+    # Setup computer
+    cpu = Processor(divide_mmu)
+
+    # Run ZN checks
+    cpu.r.ZN(value)
+
+    # Check values are correct
+    assert cpu.r.get_flag('Z') == expected[0]
+    assert cpu.r.get_flag('N') == expected[1]

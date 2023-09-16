@@ -11,7 +11,7 @@ class Registers:
     '''
     An object for holding all the information about the 6502 CPU registers
     '''
-    def __init__(self, program_counter=0):
+    def __init__(self, program_counter: int = 0) -> None:
         '''
         Initialise the registers by performing a reset.
         '''
@@ -29,7 +29,7 @@ class Registers:
         # Reset register
         self.reset(program_counter)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         '''
         Representation of object, showing content of all registers
         '''
@@ -37,7 +37,7 @@ class Registers:
                f'S: 0x{self.sp:02x} PC: 0x{self.pc:04x} Flags: {self.p:>08b}')
         return fmt
 
-    def reset(self, program_counter=0):
+    def reset(self, program_counter: int = 0) -> None:
         '''
         Simulate a register by setting the X and Y register as well as the
         accumulator, a, to zero. Set the stack pointer to the default ff.
@@ -59,14 +59,14 @@ class Registers:
         # Set status flag register
         self.p = self.flagbyte['?'] | self.flagbyte['I']
 
-    def get_flag(self, flag):
+    def get_flag(self, flag: str) -> bool:
         '''
         Return a boolean that describes the state of the flag in the status
         register.
         '''
         return bool(self.p & self.flagbyte[flag])
 
-    def set_flag(self, flag, value=True):
+    def set_flag(self, flag: str, value: bool = True) -> None:
         '''
         Set particular flag to a value (either True or False)
         '''
@@ -80,7 +80,7 @@ class Registers:
             # And status register and inverted mask to set flag to False
             self.p = self.p & invert
 
-    def ZN(self, value):
+    def ZN(self, value: int) -> None:
         '''
         Zero and Negative flag often get set together and have standard
         criteria. Function to conveniently set both together
@@ -91,7 +91,7 @@ class Registers:
         # Using twos-complement, number is negative if MSB is set
         self.set_flag('N', value & 0x80)
 
-    def clear_flags(self):
+    def clear_flags(self) -> None:
         '''
         Clears all the flags in the process status register
         '''

@@ -5,6 +5,10 @@ Created on Tue Sep  6 16:56:29 2022
 @author: SamHill
 """
 import array
+from typing import Union
+
+
+block_type = tuple[int, int, str, bool, Union[None, bytearray]]
 
 
 class MMU:
@@ -12,7 +16,7 @@ class MMU:
     Memory management unit that defines all the addresses that the 6502 can
     interact with, including ROM, RAM and peripheral I/O
     '''
-    def __init__(self, blocks):
+    def __init__(self, blocks: tuple[block_type, ...]) -> None:
         '''
         Initialise the various blocks of virtual memory that the 6502 can
         address.
@@ -31,7 +35,9 @@ class MMU:
         for b in blocks:
             self.add_block(*b)
 
-    def add_block(self, start_addr, length, name, read_only=False, data=None):
+    def add_block(self, start_addr: int, length: int, name: str,
+                  read_only: bool = False,
+                  data: Union[None, bytearray] = None) -> None:
         '''
         Add block of memory to MMU. Need various information to define memory
         block.
@@ -70,13 +76,13 @@ class MMU:
         # Add memory block to list of blocks
         self.blocks.append(new_mem)
 
-    def read(self, addr):
+    def read(self, addr: int) -> int:
         '''
         Reads byte of data from address addr
         '''
         return self.memory[addr]
 
-    def write(self, addr, value):
+    def write(self, addr: int, value: int):
         '''
         Writes value of data to address.
         '''

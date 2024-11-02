@@ -1,9 +1,37 @@
-[build-system]
-requires = ["setuptools>=42.0", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [tool.pytest.ini_options]
 addopts = "--cov=pyemul"
 testpaths = [
     "tests",
 ]
+
+[tool.poetry]
+name = "pyemul"
+version = "0.1.2"
+description = "A simple Python-based emulator of the 6502 microprocessor."
+authors = ["Sam Hill <sam.j.hill@protonmail.com>"]
+readme = "README.md"
+keywords = ["emulator", "cpu", "6502"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[tool.poetry.group.dev.dependencies]
+tox = "^4.23.2"
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+flake8 = "^7.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
